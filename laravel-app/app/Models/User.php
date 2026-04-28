@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -45,5 +46,16 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // Relationships
+    public function complaints()
+    {
+        return $this->hasMany(Complaint::class);
+    }
+
+    public function statusLogs()
+    {
+        return $this->hasMany(ComplaintStatusLog::class, 'updated_by');
     }
 }
