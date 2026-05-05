@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
 
 class ComplaintStatusLog extends Model
 {
+    protected $connection = 'mongodb';
+    protected $collection = 'complaint_status_logs';
+
     public $timestamps = false;
 
     protected $fillable = [

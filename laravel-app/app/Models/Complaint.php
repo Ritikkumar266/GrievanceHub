@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
 
 class Complaint extends Model
 {
+    protected $connection = 'mongodb';
+    protected $collection = 'complaints';
+
     protected $fillable = [
         'user_id',
         'department_id',
@@ -14,6 +17,11 @@ class Complaint extends Model
         'category',
         'status',
         'priority',
+    ];
+
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     // Relationships
