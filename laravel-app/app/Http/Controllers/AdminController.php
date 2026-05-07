@@ -18,7 +18,6 @@ class AdminController extends Controller
     {
         $this->complaintService = $complaintService;
         $this->notificationService = $notificationService;
-        $this->middleware(['auth', 'admin']);
     }
 
     /**

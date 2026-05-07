@@ -4,7 +4,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('welcome');
@@ -20,8 +22,28 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Citizen Routes
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        $user = Auth::user();
+        $complaints = [];
+        
+        if ($user->role == 'citizen') {
+            $complaints = App\Models\Complaint::where('user_id', $user->id)->get();
+        } elseif ($user->role == 'admin') {
+            $complaints = App\Models\Complaint::all();
+        } elseif ($user->role == 'department') {
+            // Get complaints assigned to user's department
+            $complaints = App\Models\Complaint::where('department_id', $user->department_id)->get();
+        }
+        
+        return view('dashboard', compact('complaints', 'user'));
     })->name('dashboard');
+
+    // Profile Routes
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/picture', [ProfileController::class, 'updatePicture'])->name('profile.picture');
+    Route::delete('/profile/picture', [ProfileController::class, 'deletePicture'])->name('profile.picture.delete');
+    Route::patch('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 
     // Complaint Routes
     Route::get('/complaints/create', [ComplaintController::class, 'create'])->name('complaints.create');

@@ -7,6 +7,7 @@ use App\Services\ComplaintService;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class ComplaintController extends Controller
 {
@@ -17,7 +18,6 @@ class ComplaintController extends Controller
     {
         $this->complaintService = $complaintService;
         $this->notificationService = $notificationService;
-        $this->middleware('auth');
     }
 
     /**
@@ -51,7 +51,13 @@ class ComplaintController extends Controller
      */
     public function show(Complaint $complaint)
     {
-        $this->authorize('view', $complaint);
+        // Check if user can view this complaint
+        $user = Auth::user();
+        if ($user->id !== $complaint->user_id && $user->role !== 'admin' && 
+            ($user->role !== 'department' || $user->id !== $complaint->department_id)) {
+            abort(403, 'Unauthorized access to this complaint.');
+        }
+
         $complaint = $this->complaintService->getComplaintWithHistory($complaint->id);
 
         return view('complaints.show', compact('complaint'));
@@ -72,7 +78,13 @@ class ComplaintController extends Controller
      */
     public function track(Complaint $complaint)
     {
-        $this->authorize('view', $complaint);
+        // Check if user can view this complaint
+        $user = Auth::user();
+        if ($user->id !== $complaint->user_id && $user->role !== 'admin' && 
+            ($user->role !== 'department' || $user->id !== $complaint->department_id)) {
+            abort(403, 'Unauthorized access to this complaint.');
+        }
+
         $complaint = $this->complaintService->getComplaintWithHistory($complaint->id);
 
         return view('complaints.track', compact('complaint'));

@@ -17,7 +17,6 @@ class DepartmentController extends Controller
     {
         $this->complaintService = $complaintService;
         $this->notificationService = $notificationService;
-        $this->middleware(['auth', 'department']);
     }
 
     /**
@@ -26,11 +25,11 @@ class DepartmentController extends Controller
     public function dashboard()
     {
         $user = Auth::user();
-        $assignedComplaints = Complaint::where('department_id', $user->id)->count();
-        $resolvedComplaints = Complaint::where('department_id', $user->id)
+        $assignedComplaints = Complaint::where('department_id', $user->department_id)->count();
+        $resolvedComplaints = Complaint::where('department_id', $user->department_id)
             ->where('status', 'resolved')
             ->count();
-        $pendingComplaints = Complaint::where('department_id', $user->id)
+        $pendingComplaints = Complaint::where('department_id', $user->department_id)
             ->where('status', 'pending')
             ->count();
 
@@ -47,7 +46,7 @@ class DepartmentController extends Controller
     public function viewComplaints()
     {
         $user = Auth::user();
-        $complaints = $this->complaintService->getDepartmentComplaints($user->id);
+        $complaints = $this->complaintService->getDepartmentComplaints($user->department_id);
 
         return view('department.complaints', compact('complaints'));
     }
