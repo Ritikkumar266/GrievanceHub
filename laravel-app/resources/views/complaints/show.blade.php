@@ -112,28 +112,36 @@
             <h3 class="text-lg font-semibold text-gray-900 mb-4">
                 <i class="fas fa-star text-yellow-500 mr-2"></i>Provide Feedback
             </h3>
-            <form action="#" method="POST">
+            <p class="text-gray-600 mb-4">Help us improve our services by rating your experience with this complaint resolution.</p>
+            
+            <form action="{{ route('complaints.feedback.store', $complaint) }}" method="POST">
                 @csrf
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Rating</label>
-                        <div class="flex space-x-2">
+                        <div class="flex items-center space-x-1" id="rating-stars">
                             @for($i = 1; $i <= 5; $i++)
-                                <button type="button" class="text-2xl text-gray-300 hover:text-yellow-500 focus:text-yellow-500">
+                                <button type="button" class="rating-star text-2xl text-gray-300 hover:text-yellow-500 focus:outline-none" data-rating="{{ $i }}">
                                     <i class="fas fa-star"></i>
                                 </button>
                             @endfor
                         </div>
+                        <input type="hidden" name="rating" id="rating-input" required>
+                        <p class="text-sm text-gray-500 mt-1">Click on stars to rate (1-5)</p>
                     </div>
+                    
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Comment</label>
-                        <textarea name="comment" rows="3" 
-                                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                  placeholder="Share your experience..."></textarea>
+                        <label for="comment" class="block text-sm font-medium text-gray-700 mb-2">Comments (Optional)</label>
+                        <textarea name="comment" id="comment" rows="4" 
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                  placeholder="Share your experience and suggestions for improvement..."></textarea>
                     </div>
-                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-                        Submit Feedback
-                    </button>
+                    
+                    <div class="flex justify-end">
+                        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                            <i class="fas fa-paper-plane mr-2"></i>Submit Feedback
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -142,16 +150,66 @@
             <h3 class="text-lg font-semibold text-gray-900 mb-4">
                 <i class="fas fa-star text-yellow-500 mr-2"></i>Your Feedback
             </h3>
-            <div class="flex items-center space-x-2 mb-2">
-                @for($i = 1; $i <= 5; $i++)
-                    <i class="fas fa-star {{ $i <= $complaint->feedback->rating ? 'text-yellow-500' : 'text-gray-300' }}"></i>
-                @endfor
-                <span class="text-sm text-gray-600">({{ $complaint->feedback->rating }}/5)</span>
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                <div class="flex items-center space-x-2 mb-2">
+                    @for($i = 1; $i <= 5; $i++)
+                        <i class="fas fa-star {{ $i <= $complaint->feedback->rating ? 'text-yellow-500' : 'text-gray-300' }}"></i>
+                    @endfor
+                    <span class="text-sm text-gray-600 ml-2">({{ $complaint->feedback->rating }}/5)</span>
+                    <span class="text-xs text-gray-500 ml-4">
+                        Submitted on {{ $complaint->feedback->created_at ? $complaint->feedback->created_at->format('M j, Y g:i A') : 'Unknown date' }}
+                    </span>
+                </div>
+                @if($complaint->feedback->comment)
+                    <p class="text-gray-700 mt-2">{{ $complaint->feedback->comment }}</p>
+                @endif
+                <p class="text-sm text-green-600 mt-2">
+                    <i class="fas fa-check-circle mr-1"></i>Thank you for your feedback!
+                </p>
             </div>
-            @if($complaint->feedback->comment)
-                <p class="text-gray-700">{{ $complaint->feedback->comment }}</p>
-            @endif
         </div>
     @endif
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const stars = document.querySelectorAll('.rating-star');
+    const ratingInput = document.getElementById('rating-input');
+    
+    if (stars.length > 0) {
+        stars.forEach((star, index) => {
+            star.addEventListener('click', function() {
+                const rating = parseInt(this.dataset.rating);
+                ratingInput.value = rating;
+                
+                // Update star colors
+                stars.forEach((s, i) => {
+                    if (i < rating) {
+                        s.classList.remove('text-gray-300');
+                        s.classList.add('text-yellow-500');
+                    } else {
+                        s.classList.remove('text-yellow-500');
+                        s.classList.add('text-gray-300');
+                    }
+                });
+            });
+            
+            star.addEventListener('mouseenter', function() {
+                const rating = parseInt(this.dataset.rating);
+                stars.forEach((s, i) => {
+                    if (i < rating) {
+                        s.classList.add('text-yellow-400');
+                    } else {
+                        s.classList.remove('text-yellow-400');
+                    }
+                });
+            });
+            
+            star.addEventListener('mouseleave', function() {
+                stars.forEach(s => s.classList.remove('text-yellow-400'));
+            });
+        });
+    }
+});
+</script>
 @endsection

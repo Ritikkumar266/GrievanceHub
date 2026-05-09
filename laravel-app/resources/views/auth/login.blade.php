@@ -3,68 +3,233 @@
 @section('title', 'Login - ComplaintHub')
 
 @section('content')
-<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8">
-        <div>
-            <div class="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-blue-100">
-                <i class="fas fa-clipboard-list text-blue-600 text-2xl"></i>
-            </div>
-            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                Sign in to your account
-            </h2>
-            <p class="mt-2 text-center text-sm text-gray-600">
-                Or
-                <a href="{{ route('register') }}" class="font-medium text-blue-600 hover:text-blue-500">
-                    create a new account
-                </a>
-            </p>
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 relative overflow-hidden">
+    <!-- Background Decorative Elements -->
+    <div class="absolute inset-0">
+        <!-- Government Building Silhouette -->
+        <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-10"></div>
+        
+        <!-- Floating Icons -->
+        <div class="absolute top-20 left-10 text-blue-200 opacity-30">
+            <i class="fas fa-balance-scale text-4xl"></i>
+        </div>
+        <div class="absolute top-40 right-20 text-indigo-200 opacity-30">
+            <i class="fas fa-landmark text-3xl"></i>
+        </div>
+        <div class="absolute bottom-40 left-20 text-purple-200 opacity-30">
+            <i class="fas fa-gavel text-3xl"></i>
+        </div>
+        <div class="absolute bottom-20 right-10 text-blue-200 opacity-30">
+            <i class="fas fa-shield-alt text-4xl"></i>
         </div>
         
-        <form class="mt-8 space-y-6" method="POST" action="{{ route('login') }}">
-            @csrf
-            <div class="rounded-md shadow-sm -space-y-px">
-                <div>
-                    <label for="email" class="sr-only">Email address</label>
-                    <input id="email" name="email" type="email" autocomplete="email" required 
-                           class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
-                           placeholder="Email address" value="{{ old('email') }}">
+        <!-- Geometric Patterns -->
+        <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-blue-100 to-transparent rounded-full opacity-50 -translate-y-32 translate-x-32"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-indigo-100 to-transparent rounded-full opacity-50 translate-y-48 -translate-x-48"></div>
+    </div>
+
+    <div class="relative z-10 min-h-screen flex">
+        <!-- Left Side - Branding & Information -->
+        <div class="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 p-12 flex-col justify-center relative overflow-hidden">
+            <!-- Background Pattern -->
+            <div class="absolute inset-0 opacity-10">
+                <div class="absolute top-10 left-10 w-20 h-20 border-2 border-white rounded-full"></div>
+                <div class="absolute top-32 right-20 w-16 h-16 border-2 border-white rounded-lg rotate-45"></div>
+                <div class="absolute bottom-32 left-20 w-12 h-12 border-2 border-white rounded-full"></div>
+                <div class="absolute bottom-10 right-10 w-24 h-24 border-2 border-white rounded-lg rotate-12"></div>
+            </div>
+            
+            <div class="relative z-10">
+                <!-- Logo & Title -->
+                <div class="mb-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mr-4 shadow-lg">
+                            <i class="fas fa-clipboard-list text-blue-600 text-2xl"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-3xl font-bold text-white">ComplaintHub</h1>
+                            <p class="text-blue-100">Government Grievance Portal</p>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <label for="password" class="sr-only">Password</label>
-                    <input id="password" name="password" type="password" autocomplete="current-password" required 
-                           class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
-                           placeholder="Password">
+
+                <!-- Mission Statement -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-semibold text-white mb-4">Your Voice Matters</h2>
+                    <p class="text-blue-100 text-lg leading-relaxed mb-6">
+                        A transparent, efficient platform connecting citizens with government departments 
+                        to resolve complaints and improve public services.
+                    </p>
+                </div>
+
+                <!-- Features -->
+                <div class="space-y-4">
+                    <div class="flex items-center text-white">
+                        <div class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-rocket text-sm"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold">Fast Resolution</h3>
+                            <p class="text-blue-100 text-sm">Quick assignment to relevant departments</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center text-white">
+                        <div class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-eye text-sm"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold">Real-time Tracking</h3>
+                            <p class="text-blue-100 text-sm">Monitor your complaint status live</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center text-white">
+                        <div class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-shield-check text-sm"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold">Secure & Transparent</h3>
+                            <p class="text-blue-100 text-sm">Protected data with full transparency</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="mt-12 grid grid-cols-3 gap-6">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-white">{{ App\Models\Complaint::count() }}+</div>
+                        <div class="text-blue-100 text-sm">Complaints Handled</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-white">{{ App\Models\Department::count() }}</div>
+                        <div class="text-blue-100 text-sm">Departments</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-white">{{ App\Models\User::where('role', 'citizen')->count() }}+</div>
+                        <div class="text-blue-100 text-sm">Citizens Served</div>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            @if ($errors->any())
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-                    @foreach ($errors->all() as $error)
-                        <p class="text-sm">{{ $error }}</p>
-                    @endforeach
+        <!-- Right Side - Login Form -->
+        <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
+            <div class="max-w-md w-full">
+                <!-- Mobile Logo (visible on small screens) -->
+                <div class="lg:hidden text-center mb-8">
+                    <div class="inline-flex items-center">
+                        <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-clipboard-list text-white text-xl"></i>
+                        </div>
+                        <div class="text-left">
+                            <h1 class="text-2xl font-bold text-gray-900">ComplaintHub</h1>
+                            <p class="text-gray-600 text-sm">Government Portal</p>
+                        </div>
+                    </div>
                 </div>
-            @endif
 
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <input id="remember-me" name="remember" type="checkbox" 
-                           class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                    <label for="remember-me" class="ml-2 block text-sm text-gray-900">
-                        Remember me
-                    </label>
+                <!-- Login Card -->
+                <div class="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
+                    <!-- Header -->
+                    <div class="text-center mb-8">
+                        <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full mb-4 shadow-lg">
+                            <i class="fas fa-user-circle text-white text-2xl"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Welcome Back</h2>
+                        <p class="text-gray-600">Sign in to access your account</p>
+                    </div>
+
+                    <!-- Quick Login Options -->
+                    <div class="mb-6">
+                        <div class="grid grid-cols-3 gap-2 text-xs">
+                            <div class="bg-blue-50 p-2 rounded-lg text-center border border-blue-100">
+                                <div class="font-semibold text-blue-700">Citizen</div>
+                                <div class="text-blue-600">Submit & Track</div>
+                            </div>
+                            <div class="bg-purple-50 p-2 rounded-lg text-center border border-purple-100">
+                                <div class="font-semibold text-purple-700">Department</div>
+                                <div class="text-purple-600">Manage Cases</div>
+                            </div>
+                            <div class="bg-indigo-50 p-2 rounded-lg text-center border border-indigo-100">
+                                <div class="font-semibold text-indigo-700">Admin</div>
+                                <div class="text-indigo-600">Full Control</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form method="POST" action="{{ route('login') }}" class="space-y-6">
+                        @csrf
+                        
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-envelope mr-2 text-gray-400"></i>Email Address
+                            </label>
+                            <input id="email" name="email" type="email" autocomplete="email" required 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 bg-gray-50 focus:bg-white" 
+                                   placeholder="Enter your email address" value="{{ old('email') }}">
+                        </div>
+
+                        <div>
+                            <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-lock mr-2 text-gray-400"></i>Password
+                            </label>
+                            <input id="password" name="password" type="password" autocomplete="current-password" required 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 bg-gray-50 focus:bg-white" 
+                                   placeholder="Enter your password">
+                        </div>
+
+                        @if ($errors->any())
+                            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                                <div class="flex items-center">
+                                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                                    <div>
+                                        @foreach ($errors->all() as $error)
+                                            <p class="text-sm">{{ $error }}</p>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <input id="remember-me" name="remember" type="checkbox" 
+                                       class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                <label for="remember-me" class="ml-2 block text-sm text-gray-700">
+                                    Remember me
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" 
+                                class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 px-4 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                            <i class="fas fa-sign-in-alt mr-2"></i>
+                            Sign In to ComplaintHub
+                        </button>
+                    </form>
+
+                    <!-- Register Link -->
+                    <div class="mt-6 text-center">
+                        <p class="text-gray-600">
+                            New to ComplaintHub? 
+                            <a href="{{ route('register') }}" class="font-semibold text-blue-600 hover:text-blue-700 transition duration-200">
+                                Create Account
+                            </a>
+                        </p>
+                    </div>
+
+
+                </div>
+
+                <!-- Footer -->
+                <div class="text-center mt-8 text-gray-500 text-sm">
+                    <p>© 2026 ComplaintHub - Government Grievance Portal</p>
+                    <p class="mt-1">Serving citizens with transparency and efficiency</p>
                 </div>
             </div>
-
-            <div>
-                <button type="submit" 
-                        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                    <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-                        <i class="fas fa-lock text-blue-500 group-hover:text-blue-400"></i>
-                    </span>
-                    Sign in
-                </button>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 @endsection

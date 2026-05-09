@@ -187,10 +187,108 @@
         </a>
         
         @if($complaint->status == 'resolved' && !$complaint->feedback)
-            <button class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
+            <button onclick="openFeedbackModal()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
                 <i class="fas fa-star mr-2"></i>Provide Feedback
             </button>
         @endif
     </div>
 </div>
+
+<!-- Feedback Modal -->
+@if($complaint->status == 'resolved' && !$complaint->feedback)
+<div id="feedbackModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="mt-3">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">
+                <i class="fas fa-star text-yellow-500 mr-2"></i>Provide Feedback
+            </h3>
+            
+            <form action="{{ route('complaints.feedback.store', $complaint) }}" method="POST">
+                @csrf
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Rating</label>
+                        <div class="flex items-center space-x-1" id="modal-rating-stars">
+                            @for($i = 1; $i <= 5; $i++)
+                                <button type="button" class="modal-rating-star text-2xl text-gray-300 hover:text-yellow-500 focus:outline-none" data-rating="{{ $i }}">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            @endfor
+                        </div>
+                        <input type="hidden" name="rating" id="modal-rating-input" required>
+                        <p class="text-sm text-gray-500 mt-1">Click on stars to rate (1-5)</p>
+                    </div>
+                    
+                    <div>
+                        <label for="modal-comment" class="block text-sm font-medium text-gray-700 mb-2">Comments (Optional)</label>
+                        <textarea name="comment" id="modal-comment" rows="3"
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                  placeholder="Share your experience..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between mt-6">
+                    <button type="button" onclick="closeFeedbackModal()"
+                            class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                        <i class="fas fa-paper-plane mr-2"></i>Submit Feedback
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endif
+
+<script>
+function openFeedbackModal() {
+    document.getElementById('feedbackModal').classList.remove('hidden');
+}
+
+function closeFeedbackModal() {
+    document.getElementById('feedbackModal').classList.add('hidden');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const modalStars = document.querySelectorAll('.modal-rating-star');
+    const modalRatingInput = document.getElementById('modal-rating-input');
+    
+    if (modalStars.length > 0) {
+        modalStars.forEach((star, index) => {
+            star.addEventListener('click', function() {
+                const rating = parseInt(this.dataset.rating);
+                modalRatingInput.value = rating;
+                
+                // Update star colors
+                modalStars.forEach((s, i) => {
+                    if (i < rating) {
+                        s.classList.remove('text-gray-300');
+                        s.classList.add('text-yellow-500');
+                    } else {
+                        s.classList.remove('text-yellow-500');
+                        s.classList.add('text-gray-300');
+                    }
+                });
+            });
+            
+            star.addEventListener('mouseenter', function() {
+                const rating = parseInt(this.dataset.rating);
+                modalStars.forEach((s, i) => {
+                    if (i < rating) {
+                        s.classList.add('text-yellow-400');
+                    } else {
+                        s.classList.remove('text-yellow-400');
+                    }
+                });
+            });
+            
+            star.addEventListener('mouseleave', function() {
+                modalStars.forEach(s => s.classList.remove('text-yellow-400'));
+            });
+        });
+    }
+});
+</script>
 @endsection

@@ -51,6 +51,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/complaints/{complaint}', [ComplaintController::class, 'show'])->name('complaints.show');
     Route::get('/my-complaints', [ComplaintController::class, 'myComplaints'])->name('complaints.my');
     Route::get('/complaints/{complaint}/track', [ComplaintController::class, 'track'])->name('complaints.track');
+    
+    // Feedback Routes
+    Route::post('/complaints/{complaint}/feedback', [ComplaintController::class, 'submitFeedback'])->name('complaints.feedback.store');
 });
 
 // Admin Routes
@@ -61,6 +64,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::post('/complaints/{complaint}/status', [AdminController::class, 'updateStatus'])->name('admin.status');
     Route::get('/departments', [AdminController::class, 'manageDepartments'])->name('admin.departments');
     Route::post('/departments', [AdminController::class, 'createDepartment'])->name('admin.departments.store');
+    Route::get('/feedback', [AdminController::class, 'viewFeedback'])->name('admin.feedback');
 });
 
 // Department Routes
@@ -69,4 +73,5 @@ Route::middleware(['auth', 'department'])->prefix('department')->group(function 
     Route::get('/complaints', [DepartmentController::class, 'viewComplaints'])->name('department.complaints');
     Route::get('/complaints/{complaint}', [DepartmentController::class, 'show'])->name('department.show');
     Route::post('/complaints/{complaint}/status', [DepartmentController::class, 'updateStatus'])->name('department.status');
+    Route::get('/feedback', [DepartmentController::class, 'viewFeedback'])->name('department.feedback');
 });

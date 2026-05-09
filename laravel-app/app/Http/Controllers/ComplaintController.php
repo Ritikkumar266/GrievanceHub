@@ -89,4 +89,40 @@ class ComplaintController extends Controller
 
         return view('complaints.track', compact('complaint'));
     }
+
+    /**
+     * Submit feedback for resolved complaint
+     */
+    public function submitFeedback(Request $request, Complaint $complaint)
+    {
+        // Check if user owns this complaint
+        if (Auth::id() !== $complaint->user_id) {
+            abort(403, 'Unauthorized access to this complaint.');
+        }
+
+        // Check if complaint is resolved
+        if ($complaint->status !== 'resolved') {
+            return back()->with('error', 'Feedback can only be provided for resolved complaints.');
+        }
+
+        // Check if feedback already exists
+        if ($complaint->feedback) {
+            return back()->with('error', 'Feedback has already been provided for this complaint.');
+        }
+
+        $validated = $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'nullable|string|max:1000',
+        ]);
+
+        // Create feedback
+        $feedback = new \App\Models\Feedback([
+            'complaint_id' => $complaint->id,
+            'rating' => $validated['rating'],
+            'comment' => $validated['comment'],
+        ]);
+        $feedback->save();
+
+        return back()->with('success', 'Thank you for your feedback! It helps us improve our services.');
+    }
 }

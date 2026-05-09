@@ -81,4 +81,17 @@ class DepartmentController extends Controller
 
         return view('department.complaint-detail', compact('complaint'));
     }
+
+    /**
+     * View department feedback
+     */
+    public function viewFeedback()
+    {
+        $user = Auth::user();
+        $feedback = \App\Models\Feedback::whereHas('complaint', function($query) use ($user) {
+            $query->where('department_id', $user->department_id);
+        })->with(['complaint.user'])->latest()->paginate(15);
+
+        return view('department.feedback', compact('feedback'));
+    }
 }

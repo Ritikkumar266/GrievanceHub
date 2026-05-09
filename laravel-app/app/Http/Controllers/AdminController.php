@@ -27,25 +27,60 @@ class AdminController extends Controller
     {
         $totalComplaints = Complaint::count();
         $pendingComplaints = Complaint::where('status', 'pending')->count();
+        $inProgressComplaints = Complaint::where('status', 'in-progress')->count();
         $resolvedComplaints = Complaint::where('status', 'resolved')->count();
         $departments = Department::count();
+        $totalUsers = User::count();
+        $citizenUsers = User::where('role', 'citizen')->count();
+        $departmentUsers = User::where('role', 'department')->count();
+
+        // Department-wise complaint counts (MongoDB compatible)
+        $departmentStats = Department::all();
+        foreach ($departmentStats as $dept) {
+            $dept->complaints_count = Complaint::where('department_id', $dept->id)->count();
+        }
+
+        // Recent complaints
+        $recentComplaints = Complaint::with('user', 'department')
+            ->latest()
+            ->take(5)
+            ->get();
 
         return view('admin.dashboard', compact(
             'totalComplaints',
             'pendingComplaints',
+            'inProgressComplaints',
             'resolvedComplaints',
-            'departments'
+            'departments',
+            'totalUsers',
+            'citizenUsers',
+            'departmentUsers',
+            'departmentStats',
+            'recentComplaints'
         ));
     }
 
     /**
      * View all complaints
      */
-    public function viewComplaints()
+    public function viewComplaints(Request $request)
     {
-        $complaints = Complaint::with('user', 'department', 'statusLogs')
-            ->latest()
-            ->paginate(15);
+        $query = Complaint::with('user', 'department', 'statusLogs');
+
+        // Apply filters
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('department')) {
+            $query->where('department_id', $request->department);
+        }
+
+        if ($request->filled('priority')) {
+            $query->where('priority', $request->priority);
+        }
+
+        $complaints = $query->latest()->paginate(15);
 
         return view('admin.complaints', compact('complaints'));
     }
@@ -91,7 +126,13 @@ class AdminController extends Controller
      */
     public function manageDepartments()
     {
-        $departments = Department::withCount('complaints')->paginate(10);
+        // Get departments with manual complaint count since withCount doesn't work with MongoDB
+        $departments = Department::paginate(10);
+        
+        // Add complaint counts manually
+        foreach ($departments as $department) {
+            $department->complaints_count = Complaint::where('department_id', $department->id)->count();
+        }
 
         return view('admin.departments', compact('departments'));
     }
@@ -110,5 +151,28 @@ class AdminController extends Controller
         Department::create($validated);
 
         return back()->with('success', 'Department created successfully!');
+    }
+
+    /**
+     * View all feedback
+     */
+    public function viewFeedback(Request $request)
+    {
+        $query = \App\Models\Feedback::with(['complaint.user', 'complaint.department']);
+
+        // Apply filters
+        if ($request->filled('rating')) {
+            $query->where('rating', $request->rating);
+        }
+
+        if ($request->filled('department')) {
+            $query->whereHas('complaint', function($q) use ($request) {
+                $q->where('department_id', $request->department);
+            });
+        }
+
+        $feedback = $query->latest()->paginate(15);
+
+        return view('admin.feedback', compact('feedback'));
     }
 }
