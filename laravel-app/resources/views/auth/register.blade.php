@@ -6,7 +6,7 @@
 <div class="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-indigo-50 relative overflow-hidden">
     <!-- Background Decorative Elements -->
     <div class="absolute inset-0">
-        <!-- Government Building Silhouette -->
+        <!-- Building Silhouette -->
         <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-green-600 to-blue-600 opacity-10"></div>
         
         <!-- Floating Icons -->
@@ -58,7 +58,7 @@
                     <h2 class="text-2xl font-semibold text-white mb-4">Empower Your Voice</h2>
                     <p class="text-green-100 text-lg leading-relaxed mb-6">
                         Join thousands of citizens making a difference. Register today to submit complaints, 
-                        track progress, and help improve government services for everyone.
+                        track progress, and help improve public services for everyone.
                     </p>
                 </div>
 
@@ -142,20 +142,18 @@
                         <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-green-500 to-blue-600 rounded-full mb-4 shadow-lg">
                             <i class="fas fa-user-plus text-white text-2xl"></i>
                         </div>
-                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Create Account</h2>
-                        <p class="text-gray-600">Join ComplaintHub community today</p>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Create Citizen Account</h2>
+                        <p class="text-gray-600">Join our community to submit and track complaints</p>
                     </div>
 
-                    <!-- Account Types Info -->
+                    <!-- Account Type Info -->
                     <div class="mb-6">
-                        <div class="grid grid-cols-1 gap-2 text-xs">
-                            <div class="bg-green-50 p-3 rounded-lg border border-green-100">
-                                <div class="flex items-center">
-                                    <i class="fas fa-user text-green-600 mr-2"></i>
-                                    <div>
-                                        <div class="font-semibold text-green-700">Citizen Account</div>
-                                        <div class="text-green-600">Submit complaints, track progress, provide feedback</div>
-                                    </div>
+                        <div class="bg-green-50 p-4 rounded-lg border border-green-100">
+                            <div class="flex items-center">
+                                <i class="fas fa-user text-green-600 mr-3 text-xl"></i>
+                                <div>
+                                    <div class="font-semibold text-green-700 text-lg">Citizen Registration</div>
+                                    <div class="text-green-600">Create your account to submit complaints, track progress, and provide feedback on public services</div>
                                 </div>
                             </div>
                         </div>
@@ -183,18 +181,8 @@
                                    placeholder="Enter your email address" value="{{ old('email') }}">
                         </div>
 
-                        <div>
-                            <label for="role" class="block text-sm font-medium text-gray-700 mb-2">
-                                <i class="fas fa-id-badge mr-2 text-gray-400"></i>Account Type
-                            </label>
-                            <select id="role" name="role" required 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200 bg-gray-50 focus:bg-white">
-                                <option value="">Select account type</option>
-                                <option value="citizen" {{ old('role') == 'citizen' ? 'selected' : '' }}>👤 Citizen</option>
-                                <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>🛡️ Admin</option>
-                                <option value="department" {{ old('role') == 'department' ? 'selected' : '' }}>🏢 Department</option>
-                            </select>
-                        </div>
+                        <!-- Hidden role field - only citizens can register -->
+                        <input type="hidden" name="role" value="citizen">
 
                         <div>
                             <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
@@ -203,6 +191,28 @@
                             <input id="password" name="password" type="password" autocomplete="new-password" required 
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200 bg-gray-50 focus:bg-white" 
                                    placeholder="Create a secure password">
+                            
+                            <!-- Password Requirements -->
+                            <div class="mt-2 text-xs text-gray-600">
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div id="req-length" class="flex items-center">
+                                        <i class="fas fa-circle text-gray-300 mr-1 text-xs"></i>
+                                        <span>At least 8 characters</span>
+                                    </div>
+                                    <div id="req-uppercase" class="flex items-center">
+                                        <i class="fas fa-circle text-gray-300 mr-1 text-xs"></i>
+                                        <span>One uppercase letter</span>
+                                    </div>
+                                    <div id="req-number" class="flex items-center">
+                                        <i class="fas fa-circle text-gray-300 mr-1 text-xs"></i>
+                                        <span>One number</span>
+                                    </div>
+                                    <div id="req-special" class="flex items-center">
+                                        <i class="fas fa-circle text-gray-300 mr-1 text-xs"></i>
+                                        <span>One special character</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div>
@@ -230,7 +240,7 @@
                         <button type="submit" 
                                 class="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:from-green-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
                             <i class="fas fa-user-plus mr-2"></i>
-                            Create ComplaintHub Account
+                            Create Citizen Account
                         </button>
                     </form>
 
@@ -257,11 +267,71 @@
 
                 <!-- Footer -->
                 <div class="text-center mt-8 text-gray-500 text-sm">
-                    <p>© 2026 ComplaintHub - Government Grievance Portal</p>
-                    <p class="mt-1">Empowering citizens through transparent governance</p>
+                    <p>© 2026 ComplaintHub - Grievance Portal</p>
+                    <p class="mt-1">Empowering citizens through transparent service delivery</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('password_confirmation');
+    
+    // Password requirements elements
+    const reqLength = document.getElementById('req-length');
+    const reqUppercase = document.getElementById('req-uppercase');
+    const reqNumber = document.getElementById('req-number');
+    const reqSpecial = document.getElementById('req-special');
+    
+    function updateRequirement(element, met) {
+        const icon = element.querySelector('i');
+        const text = element.querySelector('span');
+        
+        if (met) {
+            icon.className = 'fas fa-check-circle text-green-500 mr-1 text-xs';
+            text.className = 'text-green-600 font-medium';
+        } else {
+            icon.className = 'fas fa-circle text-gray-300 mr-1 text-xs';
+            text.className = 'text-gray-600';
+        }
+    }
+    
+    function validatePassword(password) {
+        const requirements = {
+            length: password.length >= 8,
+            uppercase: /[A-Z]/.test(password),
+            number: /\d/.test(password),
+            special: /[@$!%*?&]/.test(password)
+        };
+        
+        updateRequirement(reqLength, requirements.length);
+        updateRequirement(reqUppercase, requirements.uppercase);
+        updateRequirement(reqNumber, requirements.number);
+        updateRequirement(reqSpecial, requirements.special);
+        
+        return Object.values(requirements).every(req => req);
+    }
+    
+    passwordInput.addEventListener('input', function() {
+        validatePassword(this.value);
+    });
+    
+    // Optional: Add confirm password matching indicator
+    confirmPasswordInput.addEventListener('input', function() {
+        const password = passwordInput.value;
+        const confirmPassword = this.value;
+        
+        if (confirmPassword && password !== confirmPassword) {
+            this.style.borderColor = '#ef4444';
+        } else if (confirmPassword && password === confirmPassword) {
+            this.style.borderColor = '#10b981';
+        } else {
+            this.style.borderColor = '#d1d5db';
+        }
+    });
+});
+</script>
 @endsection

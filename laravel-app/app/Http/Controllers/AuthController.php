@@ -53,20 +53,28 @@ class AuthController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|in:citizen,admin,department',
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'confirmed',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/'
+            ],
+            'role' => 'required|in:citizen', // Only allow citizen registration
+        ], [
+            'password.regex' => 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&).'
         ]);
 
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'role' => $validated['role'],
+            'role' => 'citizen', // Force role to citizen
+            'is_verified' => true, // Auto-verify users
+            'email_verified_at' => now(),
         ]);
 
-        Auth::login($user);
-
-        return redirect('/dashboard');
+        return redirect()->route('login')->with('success', 'Registration successful! You can now login with your citizen account.');
     }
 
     /**

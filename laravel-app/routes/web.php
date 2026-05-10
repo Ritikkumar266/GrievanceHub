@@ -23,7 +23,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         $user = Auth::user();
-        $complaints = [];
+        $complaints = collect(); // Initialize as empty collection
         
         if ($user->role == 'citizen') {
             $complaints = App\Models\Complaint::where('user_id', $user->id)->get();
@@ -64,6 +64,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::post('/complaints/{complaint}/status', [AdminController::class, 'updateStatus'])->name('admin.status');
     Route::get('/departments', [AdminController::class, 'manageDepartments'])->name('admin.departments');
     Route::post('/departments', [AdminController::class, 'createDepartment'])->name('admin.departments.store');
+    Route::post('/create-manager', [AdminController::class, 'createManager'])->name('admin.create-manager');
     Route::get('/feedback', [AdminController::class, 'viewFeedback'])->name('admin.feedback');
 });
 

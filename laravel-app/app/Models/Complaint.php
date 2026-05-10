@@ -17,6 +17,7 @@ class Complaint extends Model
         'category',
         'status',
         'priority',
+        'address',
     ];
 
     protected $casts = [

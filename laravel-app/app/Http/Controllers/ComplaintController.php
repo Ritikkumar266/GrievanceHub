@@ -38,6 +38,7 @@ class ComplaintController extends Controller
             'description' => 'required|string',
             'category' => 'required|string',
             'priority' => 'required|in:low,medium,high,urgent',
+            'address' => 'required|string|max:500',
         ]);
 
         $complaint = $this->complaintService->createComplaint($validated);

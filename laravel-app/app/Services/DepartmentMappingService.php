@@ -66,7 +66,7 @@ class DepartmentMappingService
             Department::firstOrCreate(
                 ['name' => $name],
                 [
-                    'email' => strtolower(str_replace(' ', '', $name)) . '@government.local',
+                    'email' => strtolower(str_replace(' ', '', $name)) . '@dept.local',
                     'description' => $description
                 ]
             );

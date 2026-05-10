@@ -240,7 +240,12 @@
                     <div>
                         <p class="text-sm font-medium text-gray-600 mb-1">Resolution Rate</p>
                         <p class="text-3xl font-bold bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent">
-                            {{ $complaints->count() > 0 ? round(($complaints->where('status', 'resolved')->count() / $complaints->count()) * 100) : 0 }}%
+                            @php
+                                $totalComplaints = $complaints->count();
+                                $resolvedComplaints = $complaints->where('status', 'resolved')->count();
+                                $percentage = $totalComplaints > 0 ? round(($resolvedComplaints / $totalComplaints) * 100) : 0;
+                            @endphp
+                            {{ $percentage }}%
                         </p>
                         <p class="text-xs text-gray-500 mt-1">Success rate</p>
                     </div>
@@ -248,7 +253,12 @@
                         <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center shadow-lg">
                             <i class="fas fa-chart-line text-white text-xl"></i>
                         </div>
-                        @if($complaints->count() > 0 && ($complaints->where('status', 'resolved')->count() / $complaints->count()) > 0.8)
+                        @php
+                            $totalComplaints = $complaints->count();
+                            $resolvedComplaints = $complaints->where('status', 'resolved')->count();
+                            $hasHighResolutionRate = $totalComplaints > 0 && ($resolvedComplaints / $totalComplaints) > 0.8;
+                        @endphp
+                        @if($hasHighResolutionRate)
                             <div class="absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 rounded-full flex items-center justify-center">
                                 <i class="fas fa-trophy text-white text-xs"></i>
                             </div>

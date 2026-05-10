@@ -6,7 +6,7 @@
 <div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 relative overflow-hidden">
     <!-- Background Decorative Elements -->
     <div class="absolute inset-0">
-        <!-- Government Building Silhouette -->
+        <!-- Building Silhouette -->
         <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-10"></div>
         
         <!-- Floating Icons -->
@@ -48,7 +48,7 @@
                         </div>
                         <div>
                             <h1 class="text-3xl font-bold text-white">ComplaintHub</h1>
-                            <p class="text-blue-100">Government Grievance Portal</p>
+                            <p class="text-blue-100">Grievance Portal</p>
                         </div>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                 <div class="mb-8">
                     <h2 class="text-2xl font-semibold text-white mb-4">Your Voice Matters</h2>
                     <p class="text-blue-100 text-lg leading-relaxed mb-6">
-                        A transparent, efficient platform connecting citizens with government departments 
+                        A transparent, efficient platform connecting citizens with service departments 
                         to resolve complaints and improve public services.
                     </p>
                 </div>
@@ -124,7 +124,7 @@
                         </div>
                         <div class="text-left">
                             <h1 class="text-2xl font-bold text-gray-900">ComplaintHub</h1>
-                            <p class="text-gray-600 text-sm">Government Portal</p>
+                            <p class="text-gray-600 text-sm">Service Portal</p>
                         </div>
                     </div>
                 </div>
@@ -140,20 +140,15 @@
                         <p class="text-gray-600">Sign in to access your account</p>
                     </div>
 
-                    <!-- Quick Login Options -->
+                    <!-- Login Info -->
                     <div class="mb-6">
-                        <div class="grid grid-cols-3 gap-2 text-xs">
-                            <div class="bg-blue-50 p-2 rounded-lg text-center border border-blue-100">
-                                <div class="font-semibold text-blue-700">Citizen</div>
-                                <div class="text-blue-600">Submit & Track</div>
-                            </div>
-                            <div class="bg-purple-50 p-2 rounded-lg text-center border border-purple-100">
-                                <div class="font-semibold text-purple-700">Department</div>
-                                <div class="text-purple-600">Manage Cases</div>
-                            </div>
-                            <div class="bg-indigo-50 p-2 rounded-lg text-center border border-indigo-100">
-                                <div class="font-semibold text-indigo-700">Admin</div>
-                                <div class="text-indigo-600">Full Control</div>
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                            <div class="flex items-center">
+                                <i class="fas fa-info-circle text-blue-600 mr-3"></i>
+                                <div class="text-blue-700">
+                                    <div class="font-semibold">Citizens can register for new accounts</div>
+                                    <div class="text-sm text-blue-600">Admin and Department accounts are managed separately</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -225,7 +220,7 @@
 
                 <!-- Footer -->
                 <div class="text-center mt-8 text-gray-500 text-sm">
-                    <p>© 2026 ComplaintHub - Government Grievance Portal</p>
+                    <p>© 2026 ComplaintHub - Grievance Portal</p>
                     <p class="mt-1">Serving citizens with transparency and efficiency</p>
                 </div>
             </div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'ComplaintHub - Government Grievance Portal')</title>
+    <title>@yield('title', 'ComplaintHub - Grievance Portal')</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -129,7 +129,7 @@
                         </div>
                         <div>
                             <span class="font-bold text-xl bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">ComplaintHub</span>
-                            <p class="text-xs text-gray-500 -mt-1">Government Portal</p>
+                            <p class="text-xs text-gray-500 -mt-1">Grievance Portal</p>
                         </div>
                     </a>
                 </div>
@@ -273,11 +273,11 @@
                         </div>
                         <div>
                             <h3 class="text-xl font-bold">ComplaintHub</h3>
-                            <p class="text-gray-400 text-sm">Government Grievance Portal</p>
+                            <p class="text-gray-400 text-sm">Grievance Portal</p>
                         </div>
                     </div>
                     <p class="text-gray-300 mb-4 leading-relaxed">
-                        Empowering citizens through transparent governance. Submit complaints, track progress, and help improve government services for everyone.
+                        Empowering citizens through transparent service delivery. Submit complaints, track progress, and help improve services for everyone.
                     </p>
                     <div class="flex space-x-4">
                         <a href="#" class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors duration-200">

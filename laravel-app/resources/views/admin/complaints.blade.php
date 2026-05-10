@@ -165,6 +165,9 @@
                                     <div class="space-y-1">
                                         <div><i class="fas fa-tag mr-1"></i>Category: {{ $complaint->category }}</div>
                                         <div><i class="fas fa-calendar mr-1"></i>Submitted: {{ $complaint->created_at ? $complaint->created_at->format('M j, Y g:i A') : 'Unknown date' }}</div>
+                                        @if($complaint->address)
+                                            <div><i class="fas fa-map-marker-alt mr-1"></i>Location: {{ Str::limit($complaint->address, 60) }}</div>
+                                        @endif
                                         @if($complaint->feedback)
                                             <div><i class="fas fa-star mr-1 text-yellow-500"></i>Rating: {{ $complaint->feedback->rating }}/5</div>
                                         @endif

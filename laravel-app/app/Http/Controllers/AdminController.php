@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Services\ComplaintService;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -151,6 +152,53 @@ class AdminController extends Controller
         Department::create($validated);
 
         return back()->with('success', 'Department created successfully!');
+    }
+
+    /**
+     * Create department manager
+     */
+    public function createManager(Request $request)
+    {
+        $validated = $request->validate([
+            'department_id' => 'required|exists:departments,_id',
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'confirmed',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/'
+            ],
+        ], [
+            'password.regex' => 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&).',
+            'department_id.exists' => 'Selected department does not exist.',
+        ]);
+
+        // Get department name for success message
+        $department = Department::find($validated['department_id']);
+
+        // Check if department already has a manager
+        $existingManager = User::where('department_id', $validated['department_id'])
+                              ->where('role', 'department')
+                              ->first();
+
+        if ($existingManager) {
+            return back()->withErrors(['department_id' => 'This department already has a manager assigned.']);
+        }
+
+        // Create the manager
+        User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'role' => 'department',
+            'department_id' => $validated['department_id'],
+            'is_verified' => true,
+            'email_verified_at' => now(),
+        ]);
+
+        return back()->with('success', "Department manager created successfully for {$department->name}! Login credentials: {$validated['email']}");
     }
 
     /**

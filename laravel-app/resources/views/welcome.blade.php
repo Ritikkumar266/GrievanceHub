@@ -7,10 +7,10 @@
 <div class="relative bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-800 text-white overflow-hidden">
     <!-- Background Decorative Elements -->
     <div class="absolute inset-0">
-        <!-- Government Building Silhouettes -->
+        <!-- Building Silhouettes -->
         <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black to-transparent opacity-20"></div>
         
-        <!-- Floating Government Icons -->
+        <!-- Floating Service Icons -->
         <div class="absolute top-20 left-10 text-white opacity-10">
             <i class="fas fa-landmark text-6xl"></i>
         </div>
@@ -47,7 +47,7 @@
                 </div>
                 <div class="text-left">
                     <h1 class="text-4xl font-bold">ComplaintHub</h1>
-                    <p class="text-blue-100 text-lg">Government Grievance Portal</p>
+                    <p class="text-blue-100 text-lg">Grievance Portal</p>
                 </div>
             </div>
 
@@ -56,7 +56,7 @@
                 Your Voice <span class="text-yellow-300">Matters</span>
             </h2>
             <p class="text-xl mb-8 max-w-3xl mx-auto leading-relaxed text-blue-100">
-                A transparent, efficient platform connecting citizens with government departments 
+                A transparent, efficient platform connecting citizens with service departments 
                 to resolve complaints, improve public services, and build a better community together.
             </p>
 
@@ -84,14 +84,21 @@
                 </div>
                 <div class="text-center">
                     <div class="text-3xl font-bold text-yellow-300">{{ App\Models\Department::count() }}</div>
-                    <div class="text-blue-100 text-sm">Government Departments</div>
+                    <div class="text-blue-100 text-sm">Service Departments</div>
                 </div>
                 <div class="text-center">
                     <div class="text-3xl font-bold text-yellow-300">{{ App\Models\User::where('role', 'citizen')->count() }}+</div>
                     <div class="text-blue-100 text-sm">Active Citizens</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-3xl font-bold text-yellow-300">{{ App\Models\Complaint::where('status', 'resolved')->count() > 0 ? round((App\Models\Complaint::where('status', 'resolved')->count() / App\Models\Complaint::count()) * 100) : 95 }}%</div>
+                    <div class="text-3xl font-bold text-yellow-300">
+                        @php
+                            $totalComplaints = App\Models\Complaint::count();
+                            $resolvedComplaints = App\Models\Complaint::where('status', 'resolved')->count();
+                            $resolutionRate = $totalComplaints > 0 ? round(($resolvedComplaints / $totalComplaints) * 100) : 95;
+                        @endphp
+                        {{ $resolutionRate }}%
+                    </div>
                     <div class="text-blue-100 text-sm">Resolution Rate</div>
                 </div>
             </div>
@@ -158,7 +165,7 @@
                 <h3 class="text-2xl font-semibold mb-4 text-gray-800">Get Resolution</h3>
                 <p class="text-gray-600 leading-relaxed">
                     Receive timely resolution with complete transparency. Provide feedback 
-                    on service quality to help improve government services.
+                    on service quality to help improve public services.
                 </p>
             </div>
         </div>
@@ -228,7 +235,7 @@
         <h2 class="text-4xl font-bold mb-6">Ready to Make Your Voice Heard?</h2>
         <p class="text-xl mb-8 text-blue-100">
             Join thousands of citizens who trust ComplaintHub to resolve their concerns 
-            and improve government services for everyone.
+            and improve public services for everyone.
         </p>
         
         @guest
@@ -248,8 +255,8 @@
         
         <div class="mt-12 text-center">
             <p class="text-blue-100 text-sm">
-                © 2026 ComplaintHub - Government Grievance Portal<br>
-                Empowering citizens through transparent governance
+                © 2026 ComplaintHub - Grievance Portal<br>
+                Empowering citizens through transparent service delivery
             </p>
         </div>
     </div>
