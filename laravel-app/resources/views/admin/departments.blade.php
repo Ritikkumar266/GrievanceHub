@@ -205,108 +205,92 @@
         @endif
     </div>
 
-    <!-- Quick Setup -->
-    <div class="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-        <div class="flex items-start">
-            <div class="flex-shrink-0">
-                <i class="fas fa-info-circle text-blue-600 text-xl"></i>
-            </div>
-            <div class="ml-3">
-                <h3 class="text-sm font-medium text-blue-800">Quick Setup</h3>
-                <div class="mt-2 text-sm text-blue-700">
-                    <p>To quickly setup all default departments with managers, run:</p>
-                    <code class="bg-blue-100 px-2 py-1 rounded mt-1 inline-block">php artisan setup:departments</code>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Create Manager Modal -->
-<div id="managerModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
-    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-        <div class="mt-3">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-medium text-gray-900">
-                    <i class="fas fa-user-plus text-green-600 mr-2"></i>
-                    Assign Department Manager
-                </h3>
-                <button onclick="closeManagerModal()" class="text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <form id="managerForm" method="POST" action="{{ route('admin.create-manager') }}">
-                @csrf
-                <input type="hidden" id="departmentId" name="department_id">
-                
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Department</label>
-                    <input type="text" id="departmentName" readonly 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600">
+    <!-- Create Manager Modal -->
+    <div id="managerModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium text-gray-900">
+                        <i class="fas fa-user-plus text-green-600 mr-2"></i>
+                        Assign Department Manager
+                    </h3>
+                    <button onclick="closeManagerModal()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
                 
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Manager Name *</label>
-                    <input type="text" name="name" required 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
-                           placeholder="e.g., John Smith">
-                </div>
-                
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
-                    <input type="email" name="email" required 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
-                           placeholder="e.g., manager@department.gov">
-                </div>
-                
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Password *</label>
-                    <input type="password" name="password" id="password" required 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
-                           placeholder="Min 8 chars, 1 uppercase, 1 number, 1 special">
+                <form id="managerForm" method="POST" action="{{ route('admin.create-manager') }}">
+                    @csrf
+                    <input type="hidden" id="departmentId" name="department_id">
                     
-                    <!-- Password Requirements -->
-                    <div class="mt-2 text-xs text-gray-600">
-                        <div class="grid grid-cols-2 gap-2">
-                            <div id="req-length" class="flex items-center">
-                                <i class="fas fa-circle text-gray-300 mr-1 text-xs"></i>
-                                <span>At least 8 characters</span>
-                            </div>
-                            <div id="req-uppercase" class="flex items-center">
-                                <i class="fas fa-circle text-gray-300 mr-1 text-xs"></i>
-                                <span>One uppercase letter</span>
-                            </div>
-                            <div id="req-number" class="flex items-center">
-                                <i class="fas fa-circle text-gray-300 mr-1 text-xs"></i>
-                                <span>One number</span>
-                            </div>
-                            <div id="req-special" class="flex items-center">
-                                <i class="fas fa-circle text-gray-300 mr-1 text-xs"></i>
-                                <span>One special character</span>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Department</label>
+                        <input type="text" id="departmentName" readonly 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Manager Name *</label>
+                        <input type="text" name="name" required 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+                               placeholder="e.g., John Smith">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
+                        <input type="email" name="email" required 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+                               placeholder="e.g., manager@department.gov">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Password *</label>
+                        <input type="password" name="password" id="password" required 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+                               placeholder="Min 8 chars, 1 uppercase, 1 number, 1 special">
+                        
+                        <!-- Password Requirements -->
+                        <div class="mt-2 text-xs text-gray-600">
+                            <div class="grid grid-cols-2 gap-2">
+                                <div id="req-length" class="flex items-center">
+                                    <i class="fas fa-circle text-gray-300 mr-1 text-xs"></i>
+                                    <span>At least 8 characters</span>
+                                </div>
+                                <div id="req-uppercase" class="flex items-center">
+                                    <i class="fas fa-circle text-gray-300 mr-1 text-xs"></i>
+                                    <span>One uppercase letter</span>
+                                </div>
+                                <div id="req-number" class="flex items-center">
+                                    <i class="fas fa-circle text-gray-300 mr-1 text-xs"></i>
+                                    <span>One number</span>
+                                </div>
+                                <div id="req-special" class="flex items-center">
+                                    <i class="fas fa-circle text-gray-300 mr-1 text-xs"></i>
+                                    <span>One special character</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Confirm Password *</label>
-                    <input type="password" name="password_confirmation" required 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
-                           placeholder="Confirm password">
-                </div>
-                
-                <div class="flex justify-end space-x-3">
-                    <button type="button" onclick="closeManagerModal()" 
-                            class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition">
-                        Cancel
-                    </button>
-                    <button type="submit" 
-                            class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">
-                        <i class="fas fa-user-plus mr-2"></i>Create Manager
-                    </button>
-                </div>
-            </form>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Confirm Password *</label>
+                        <input type="password" name="password_confirmation" required 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500"
+                               placeholder="Confirm password">
+                    </div>
+                    
+                    <div class="flex justify-end space-x-3">
+                        <button type="button" onclick="closeManagerModal()" 
+                                class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition">
+                            Cancel
+                        </button>
+                        <button type="submit" 
+                                class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">
+                            <i class="fas fa-user-plus mr-2"></i>Create Manager
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

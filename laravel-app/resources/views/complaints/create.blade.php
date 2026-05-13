@@ -61,7 +61,7 @@
             </a>
         </div>
 
-        <form method="POST" action="{{ route('complaints.store') }}" class="space-y-8">
+        <form method="POST" action="{{ route('complaints.store') }}" enctype="multipart/form-data" class="space-y-8">
             @csrf
 
             <!-- Form Progress Bar -->
@@ -300,6 +300,55 @@
                 @enderror
             </div>
 
+            <!-- Image Upload Field -->
+            <div class="group">
+                <label for="images" class="block text-sm font-semibold text-gray-700 mb-3">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 bg-gradient-to-r from-pink-500 to-rose-600 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-camera text-white text-sm"></i>
+                        </div>
+                        <span>Upload Images</span>
+                        <span class="text-gray-500 ml-1">(Optional)</span>
+                    </div>
+                </label>
+                <div class="relative">
+                    <div class="border-2 border-dashed border-gray-300 rounded-2xl p-6 hover:border-pink-400 transition-all duration-300 group-hover:border-gray-400 cursor-pointer" onclick="document.getElementById('images').click()">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-gradient-to-r from-pink-100 to-rose-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-cloud-upload-alt text-pink-600 text-2xl"></i>
+                            </div>
+                            <div class="mb-4">
+                                <div>
+                                    <span class="text-lg font-medium text-gray-700">Click to upload images</span>
+                                    <p class="text-sm text-gray-500 mt-1">or drag and drop files here</p>
+                                </div>
+                                <input type="file" id="images" name="images[]" multiple accept="image/*" 
+                                       class="hidden" onchange="handleImageUpload(this)">
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                <p>📸 Supported formats: JPG, PNG, GIF</p>
+                                <p>📏 Maximum size: 2MB per image</p>
+                                <p>🔢 Maximum 5 images</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Image Preview Container -->
+                        <div id="image-preview" class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4 hidden">
+                            <!-- Previews will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+                @error('images.*')
+                    <p class="mt-2 text-sm text-red-600 flex items-center">
+                        <i class="fas fa-exclamation-circle mr-2"></i>{{ $message }}
+                    </p>
+                @enderror
+                <p class="mt-2 text-xs text-gray-500">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    Upload clear photos that show the issue clearly. This helps departments understand and resolve your complaint faster.
+                </p>
+            </div>
+
             <!-- Guidelines Section -->
             <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-2xl p-6">
                 <div class="flex items-start">
@@ -410,6 +459,24 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing complaint form...');
+    
+    // Test if image upload elements exist
+    const imageInput = document.getElementById('images');
+    const imagePreview = document.getElementById('image-preview');
+    
+    if (imageInput) {
+        console.log('Image input found');
+    } else {
+        console.error('Image input not found!');
+    }
+    
+    if (imagePreview) {
+        console.log('Image preview container found');
+    } else {
+        console.error('Image preview container not found!');
+    }
+    
     // Form progress tracking
     const form = document.querySelector('form');
     const progressBar = document.getElementById('progress-bar');
@@ -520,5 +587,122 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initial progress update
     updateProgress();
 });
+
+// Image upload handling
+function handleImageUpload(input) {
+    console.log('handleImageUpload called', input.files.length, 'files selected');
+    
+    const files = Array.from(input.files);
+    const previewContainer = document.getElementById('image-preview');
+    const maxFiles = 5;
+    
+    // Limit to 5 files
+    if (files.length > maxFiles) {
+        alert(`You can only upload a maximum of ${maxFiles} images.`);
+        input.value = '';
+        return;
+    }
+    
+    // Clear previous previews
+    previewContainer.innerHTML = '';
+    
+    if (files.length > 0) {
+        previewContainer.classList.remove('hidden');
+        
+        files.forEach((file, index) => {
+            console.log('Processing file:', file.name, 'Size:', file.size, 'Type:', file.type);
+            
+            // Validate file size (2MB)
+            if (file.size > 2 * 1024 * 1024) {
+                alert(`Image "${file.name}" is too large. Maximum size is 2MB.`);
+                return;
+            }
+            
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                alert(`"${file.name}" is not a valid image file.`);
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                console.log('File loaded:', file.name);
+                const previewDiv = document.createElement('div');
+                previewDiv.className = 'relative group';
+                previewDiv.innerHTML = `
+                    <div class="aspect-square rounded-xl overflow-hidden border-2 border-gray-200 hover:border-pink-400 transition-all duration-300">
+                        <img src="${e.target.result}" alt="Preview ${index + 1}" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <button type="button" onclick="removeImage(${index})" 
+                            class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors duration-200 opacity-0 group-hover:opacity-100">
+                        <i class="fas fa-times text-xs"></i>
+                    </button>
+                    <div class="mt-2 text-xs text-gray-600 text-center truncate px-1">
+                        ${file.name}
+                    </div>
+                `;
+                previewContainer.appendChild(previewDiv);
+            };
+            reader.readAsDataURL(file);
+        });
+    } else {
+        previewContainer.classList.add('hidden');
+    }
+}
+
+function removeImage(index) {
+    const input = document.getElementById('images');
+    const dt = new DataTransfer();
+    const files = Array.from(input.files);
+    
+    files.forEach((file, i) => {
+        if (i !== index) {
+            dt.items.add(file);
+        }
+    });
+    
+    input.files = dt.files;
+    handleImageUpload(input);
+}
+
+// Drag and drop functionality
+const dropZone = document.querySelector('.border-dashed');
+if (dropZone) {
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, preventDefaults, false);
+    });
+    
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, highlight, false);
+    });
+    
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, unhighlight, false);
+    });
+    
+    function highlight(e) {
+        dropZone.classList.add('border-pink-400', 'bg-pink-50');
+    }
+    
+    function unhighlight(e) {
+        dropZone.classList.remove('border-pink-400', 'bg-pink-50');
+    }
+    
+    dropZone.addEventListener('drop', handleDrop, false);
+    
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        const input = document.getElementById('images');
+        input.files = files;
+        handleImageUpload(input);
+    }
+}
 </script>
 @endsection

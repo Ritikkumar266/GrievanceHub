@@ -212,6 +212,12 @@
                                                 {{ $complaint->title }}
                                             </h3>
                                             
+                                            <!-- Complaint ID Badge -->
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-mono bg-purple-100 text-purple-800 border border-purple-200">
+                                                <i class="fas fa-hashtag mr-1"></i>
+                                                {{ $complaint->complaint_id ?? 'ID-PENDING' }}
+                                            </span>
+                                            
                                             <!-- Status Badge -->
                                             <span class="status-badge inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
                                                 @if($complaint->status == 'pending') bg-yellow-100 text-yellow-800 border border-yellow-200
@@ -266,6 +272,12 @@
                                                 <div class="flex items-center">
                                                     <i class="fas fa-building text-indigo-500 mr-2"></i>
                                                     <span>{{ $complaint->department->name }}</span>
+                                                </div>
+                                            @endif
+                                            @if($complaint->images && count($complaint->images) > 0)
+                                                <div class="flex items-center">
+                                                    <i class="fas fa-images text-pink-500 mr-2"></i>
+                                                    <span>{{ count($complaint->images) }} {{ count($complaint->images) == 1 ? 'image' : 'images' }}</span>
                                                 </div>
                                             @endif
                                             <div class="flex items-center">

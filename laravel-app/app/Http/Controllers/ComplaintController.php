@@ -39,12 +39,25 @@ class ComplaintController extends Controller
             'category' => 'required|string',
             'priority' => 'required|in:low,medium,high,urgent',
             'address' => 'required|string|max:500',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        // Handle image uploads
+        $imagePaths = [];
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('complaint-images', 'public');
+                $imagePaths[] = $path;
+            }
+        }
+
+        // Add images to validated data
+        $validated['images'] = $imagePaths;
 
         $complaint = $this->complaintService->createComplaint($validated);
         $this->notificationService->notifyComplaintSubmitted($complaint);
 
-        return redirect('/dashboard')->with('success', 'Complaint submitted successfully!');
+        return redirect('/dashboard')->with('success', 'Complaint submitted successfully! Your complaint ID is: ' . $complaint->complaint_id);
     }
 
     /**

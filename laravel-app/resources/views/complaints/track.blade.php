@@ -15,13 +15,22 @@
     <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
         <div class="flex items-start justify-between">
             <div>
-                <h2 class="text-xl font-semibold text-gray-900 mb-2">{{ $complaint->title }}</h2>
+                <div class="flex items-center space-x-3 mb-2">
+                    <h2 class="text-xl font-semibold text-gray-900">{{ $complaint->title }}</h2>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-mono bg-purple-100 text-purple-800 border border-purple-200">
+                        <i class="fas fa-hashtag mr-1"></i>
+                        {{ $complaint->complaint_id ?? 'ID-PENDING' }}
+                    </span>
+                </div>
                 <p class="text-gray-600 mb-4">{{ Str::limit($complaint->description, 150) }}</p>
                 <div class="flex items-center space-x-4 text-sm text-gray-600">
                     <span><i class="fas fa-calendar mr-1"></i>Submitted: {{ $complaint->created_at ? $complaint->created_at->format('M j, Y') : 'Unknown date' }}</span>
                     <span><i class="fas fa-tag mr-1"></i>{{ $complaint->category }}</span>
                     @if($complaint->department)
                         <span><i class="fas fa-building mr-1"></i>{{ $complaint->department->name }}</span>
+                    @endif
+                    @if($complaint->images && count($complaint->images) > 0)
+                        <span><i class="fas fa-images mr-1 text-pink-500"></i>{{ count($complaint->images) }} {{ count($complaint->images) == 1 ? 'image' : 'images' }}</span>
                     @endif
                 </div>
             </div>

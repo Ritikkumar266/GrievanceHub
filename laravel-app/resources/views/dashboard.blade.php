@@ -4,25 +4,30 @@
 
 @section('content')
 <!-- Hero Section -->
-<div class="relative overflow-hidden bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700">
-    <div class="absolute inset-0 bg-black/20"></div>
-    <div class="absolute inset-0 bg-gradient-to-r from-blue-600/30 to-purple-600/30"></div>
+<div id="hero-section" class="relative overflow-hidden bg-gradient-to-br from-blue-100 via-indigo-200 to-purple-400">
+    <div class="absolute inset-0 bg-white/10"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-blue-100/30 to-purple-200/30"></div>
     
     <!-- Animated Background Elements -->
-    <div class="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full animate-bounce-subtle"></div>
-    <div class="absolute top-32 right-20 w-16 h-16 bg-white/5 rounded-full animate-bounce-subtle" style="animation-delay: 0.5s;"></div>
-    <div class="absolute bottom-20 left-1/4 w-12 h-12 bg-white/10 rounded-full animate-bounce-subtle" style="animation-delay: 1s;"></div>
+    <div class="absolute top-10 left-10 w-20 h-20 bg-indigo-500/10 rounded-full animate-bounce-subtle"></div>
+    <div class="absolute top-32 right-20 w-16 h-16 bg-purple-500/10 rounded-full animate-bounce-subtle" style="animation-delay: 0.5s;"></div>
+    <div class="absolute bottom-20 left-1/4 w-12 h-12 bg-blue-500/10 rounded-full animate-bounce-subtle" style="animation-delay: 1s;"></div>
+    <div class="absolute top-20 right-1/3 w-8 h-8 bg-indigo-600/10 rounded-lg rotate-45 animate-bounce-subtle" style="animation-delay: 1.5s;"></div>
+    <div class="absolute bottom-10 right-1/4 w-14 h-14 bg-purple-400/10 rounded-full animate-bounce-subtle" style="animation-delay: 0.7s;"></div>
+    <div class="absolute top-1/2 left-16 w-6 h-6 bg-pink-500/15 rounded-full animate-bounce-subtle" style="animation-delay: 2s;"></div>
+    <div class="absolute bottom-32 right-10 w-10 h-10 bg-indigo-400/15 rounded-lg rotate-12 animate-bounce-subtle" style="animation-delay: 1.2s;"></div>
+    <div class="absolute top-16 left-1/3 w-4 h-4 bg-purple-600/20 rounded-full animate-pulse"></div>
     
     <div class="relative max-w-7xl mx-auto px-4 py-16">
-        <div class="text-center text-white">
+        <div class="text-center text-indigo-900">
             <div class="animate-fade-in">
                 <h1 class="text-4xl md:text-5xl font-bold mb-4">
                     Welcome back, 
-                    <span class="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+                    <span class="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
                         {{ Auth::user()->name }}!
                     </span>
                 </h1>
-                <p class="text-xl md:text-2xl text-blue-100 mb-8 max-w-3xl mx-auto">
+                <p class="text-xl md:text-2xl text-indigo-700 mb-8 max-w-3xl mx-auto">
                     @if(Auth::user()->role == 'citizen')
                         🏛️ Your voice matters. Manage your complaints and track their progress in real-time.
                     @elseif(Auth::user()->role == 'admin')
@@ -33,9 +38,9 @@
                 </p>
                 
                 <!-- Role Badge -->
-                <div class="inline-flex items-center px-6 py-3 bg-white/20 backdrop-blur-md rounded-full border border-white/30">
-                    <div class="w-3 h-3 bg-green-400 rounded-full mr-3 animate-pulse"></div>
-                    <span class="text-white font-semibold capitalize">{{ Auth::user()->role }} Dashboard</span>
+                <div class="inline-flex items-center px-6 py-3 bg-white/60 backdrop-blur-md rounded-full border border-indigo-200 shadow-sm">
+                    <div class="w-3 h-3 bg-green-500 rounded-full mr-3 animate-pulse"></div>
+                    <span class="text-indigo-900 font-semibold capitalize">{{ Auth::user()->role }} Dashboard</span>
                 </div>
             </div>
         </div>

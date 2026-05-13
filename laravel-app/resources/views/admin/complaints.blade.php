@@ -143,6 +143,13 @@
                             <div class="flex-1">
                                 <div class="flex items-center space-x-3 mb-2">
                                     <h3 class="text-lg font-medium text-gray-900">{{ $complaint->title }}</h3>
+                                    
+                                    <!-- Complaint ID -->
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-mono bg-purple-100 text-purple-800 border border-purple-200">
+                                        <i class="fas fa-hashtag mr-1"></i>
+                                        {{ $complaint->complaint_id ?? 'ID-PENDING' }}
+                                    </span>
+                                    
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                         @if($complaint->status == 'pending') bg-yellow-100 text-yellow-800
                                         @elseif($complaint->status == 'in-progress') bg-blue-100 text-blue-800
@@ -181,12 +188,15 @@
                                         @else
                                             <div><i class="fas fa-exclamation-triangle mr-1 text-yellow-500"></i>Not Assigned</div>
                                         @endif
+                                        @if($complaint->images && count($complaint->images) > 0)
+                                            <div><i class="fas fa-images mr-1 text-pink-500"></i>Images: {{ count($complaint->images) }}</div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
                             
                             <div class="flex flex-col space-y-2 ml-4">
-                                <a href="{{ route('complaints.show', $complaint) }}" 
+                                <a href="{{ route('admin.show', $complaint) }}" 
                                    class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition text-center">
                                     <i class="fas fa-eye mr-1"></i>View Details
                                 </a>

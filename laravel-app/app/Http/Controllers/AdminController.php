@@ -123,6 +123,16 @@ class AdminController extends Controller
     }
 
     /**
+     * View complaint details
+     */
+    public function show(Complaint $complaint)
+    {
+        $complaint = $this->complaintService->getComplaintWithHistory($complaint->id);
+
+        return view('admin.complaint-detail', compact('complaint'));
+    }
+
+    /**
      * Manage departments
      */
     public function manageDepartments()

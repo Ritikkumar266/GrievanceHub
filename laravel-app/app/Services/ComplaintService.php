@@ -24,6 +24,8 @@ class ComplaintService
             'description' => $data['description'],
             'category' => $data['category'],
             'priority' => $data['priority'] ?? 'medium',
+            'address' => $data['address'] ?? null,
+            'images' => $data['images'] ?? [],
             'status' => $departmentId ? 'in-progress' : 'pending', // If department found, set to in-progress
         ]);
 

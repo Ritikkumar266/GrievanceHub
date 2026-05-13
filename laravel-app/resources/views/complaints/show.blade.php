@@ -91,6 +91,11 @@
                         <!-- Meta Information -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                             <div class="flex items-center text-gray-600">
+                                <i class="fas fa-hashtag text-purple-500 mr-3 w-5"></i>
+                                <span class="font-medium">Complaint ID:</span>
+                                <span class="ml-2 font-mono bg-gray-100 px-2 py-1 rounded text-xs">{{ $complaint->complaint_id ?? 'Not assigned' }}</span>
+                            </div>
+                            <div class="flex items-center text-gray-600">
                                 <i class="fas fa-calendar text-blue-500 mr-3 w-5"></i>
                                 <span class="font-medium">Submitted:</span>
                                 <span class="ml-2">{{ $complaint->created_at ? $complaint->created_at->format('M j, Y g:i A') : 'Unknown date' }}</span>
@@ -170,6 +175,44 @@
                     <h3 class="text-xl font-bold text-gray-900">Location/Address</h3>
                 </div>
                 <p class="text-gray-700 leading-relaxed text-lg">{{ $complaint->address }}</p>
+            </div>
+        @endif
+
+        <!-- Images Section -->
+        @if($complaint->images && count($complaint->images) > 0)
+            <div class="bg-gradient-to-r from-pink-50 to-rose-50 rounded-2xl p-6 mb-8 border border-pink-200">
+                <div class="flex items-center mb-4">
+                    <div class="w-10 h-10 bg-gradient-to-r from-pink-500 to-rose-600 rounded-xl flex items-center justify-center mr-4">
+                        <i class="fas fa-images text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900">Attached Images</h3>
+                    <span class="ml-2 text-sm text-gray-500">({{ count($complaint->images) }} {{ count($complaint->images) == 1 ? 'image' : 'images' }})</span>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    @foreach($complaint->image_urls as $index => $imageUrl)
+                        <div class="group relative">
+                            <div class="aspect-square rounded-xl overflow-hidden border-2 border-gray-200 hover:border-pink-400 transition-all duration-300 cursor-pointer"
+                                 onclick="openImageModal('{{ $imageUrl }}', {{ $index + 1 }})">
+                                <img src="{{ $imageUrl }}" 
+                                     alt="Complaint Image {{ $index + 1 }}" 
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                     loading="lazy">
+                            </div>
+                            <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-search-plus text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-2xl"></i>
+                            </div>
+                            <div class="mt-2 text-center">
+                                <span class="text-xs text-gray-600">Image {{ $index + 1 }}</span>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                
+                <div class="mt-4 text-xs text-gray-500 text-center">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    Click on any image to view in full size
+                </div>
             </div>
         @endif
 
@@ -454,5 +497,63 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Image modal functionality
+function openImageModal(imageUrl, imageNumber) {
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    const imageCounter = document.getElementById('imageCounter');
+    
+    modalImage.src = imageUrl;
+    imageCounter.textContent = `Image ${imageNumber}`;
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeImageModal() {
+    const modal = document.getElementById('imageModal');
+    modal.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+}
+
+// Close modal when clicking outside the image
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('imageModal');
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeImageModal();
+            }
+        });
+    }
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeImageModal();
+        }
+    });
+});
 </script>
+
+<!-- Image Modal -->
+<div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden flex items-center justify-center p-4">
+    <div class="relative max-w-4xl max-h-full">
+        <button onclick="closeImageModal()" 
+                class="absolute -top-4 -right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors duration-200 z-10">
+            <i class="fas fa-times text-gray-600"></i>
+        </button>
+        
+        <div class="bg-white rounded-2xl overflow-hidden shadow-2xl">
+            <div class="p-4 bg-gray-50 border-b">
+                <h3 class="text-lg font-semibold text-gray-800" id="imageCounter">Image</h3>
+            </div>
+            <div class="p-4">
+                <img id="modalImage" src="" alt="Complaint Image" 
+                     class="max-w-full max-h-[70vh] object-contain mx-auto rounded-lg">
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection

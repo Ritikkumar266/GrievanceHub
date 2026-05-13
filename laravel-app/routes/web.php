@@ -60,6 +60,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/complaints', [AdminController::class, 'viewComplaints'])->name('admin.complaints');
+    Route::get('/complaints/{complaint}', [AdminController::class, 'show'])->name('admin.show');
     Route::post('/complaints/{complaint}/assign', [AdminController::class, 'assignDepartment'])->name('admin.assign');
     Route::post('/complaints/{complaint}/status', [AdminController::class, 'updateStatus'])->name('admin.status');
     Route::get('/departments', [AdminController::class, 'manageDepartments'])->name('admin.departments');

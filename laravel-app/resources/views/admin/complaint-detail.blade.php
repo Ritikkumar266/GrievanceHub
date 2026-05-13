@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Complaint Details - ComplaintHub')
+@section('title', 'Complaint Details - Admin')
 
 @section('content')
 <div class="max-w-4xl mx-auto px-4 py-8">
@@ -8,9 +8,9 @@
     <div class="flex items-center justify-between mb-8">
         <div>
             <h1 class="text-3xl font-bold text-gray-800">Complaint Details</h1>
-            <p class="text-gray-600 mt-2">Review and manage complaint information</p>
+            <p class="text-gray-600 mt-2">Review and manage complaint information (Admin View)</p>
         </div>
-        <a href="{{ route('department.complaints') }}" 
+        <a href="{{ route('admin.complaints') }}" 
            class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition">
             <i class="fas fa-arrow-left mr-2"></i>Back to Complaints
         </a>
@@ -57,6 +57,16 @@
                             <p class="text-gray-900">{{ $complaint->created_at ? $complaint->created_at->format('M j, Y g:i A') : 'Unknown' }}</p>
                         </div>
                     </div>
+
+                    @if($complaint->address)
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-700 mb-2">Location/Address</h3>
+                        <div class="flex items-start space-x-2">
+                            <i class="fas fa-map-marker-alt text-red-500 mt-1"></i>
+                            <p class="text-gray-900">{{ $complaint->address }}</p>
+                        </div>
+                    </div>
+                    @endif
 
                     @if($complaint->user)
                     <div>
@@ -144,6 +154,9 @@
                                     @if($log->updatedBy)
                                         <p class="text-xs text-gray-500 mt-1">
                                             Updated by: {{ $log->updatedBy->name }}
+                                            @if($log->updatedBy->role)
+                                                <span class="ml-1 px-2 py-0.5 bg-gray-200 text-gray-600 rounded-full text-xs capitalize">{{ $log->updatedBy->role }}</span>
+                                            @endif
                                         </p>
                                     @endif
                                     @if($log->remarks)
@@ -159,31 +172,28 @@
             </div>
 
             <!-- Feedback Section -->
-            @if($complaint->feedback && $complaint->feedback->count() > 0)
+            @if($complaint->feedback)
             <div class="bg-white rounded-lg shadow p-6">
                 <h2 class="text-xl font-semibold text-gray-800 mb-4">Citizen Feedback</h2>
                 
-                <div class="space-y-4">
-                    @foreach($complaint->feedback as $feedback)
-                        <div class="p-4 bg-gray-50 rounded-lg">
-                            <div class="flex items-center justify-between mb-2">
-                                <div class="flex items-center space-x-2">
-                                    <span class="text-sm font-medium text-gray-900">Rating:</span>
-                                    <div class="flex items-center">
-                                        @for($i = 1; $i <= 5; $i++)
-                                            <i class="fas fa-star text-sm {{ $i <= $feedback->rating ? 'text-yellow-400' : 'text-gray-300' }}"></i>
-                                        @endfor
-                                    </div>
-                                </div>
-                                <span class="text-xs text-gray-500">
-                                    {{ $feedback->created_at ? $feedback->created_at->format('M j, Y') : 'Unknown date' }}
-                                </span>
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm font-medium text-gray-900">Rating:</span>
+                            <div class="flex items-center">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <i class="fas fa-star text-sm {{ $i <= $complaint->feedback->rating ? 'text-yellow-400' : 'text-gray-300' }}"></i>
+                                @endfor
                             </div>
-                            @if($feedback->comment)
-                                <p class="text-gray-700">{{ $feedback->comment }}</p>
-                            @endif
+                            <span class="text-sm font-semibold text-green-700">{{ $complaint->feedback->rating }}/5</span>
                         </div>
-                    @endforeach
+                        <span class="text-xs text-gray-500">
+                            {{ $complaint->feedback->created_at ? $complaint->feedback->created_at->format('M j, Y') : 'Unknown date' }}
+                        </span>
+                    </div>
+                    @if($complaint->feedback->comment)
+                        <p class="text-gray-700 mt-2">{{ $complaint->feedback->comment }}</p>
+                    @endif
                 </div>
             </div>
             @endif
@@ -192,32 +202,25 @@
         <!-- Sidebar -->
         <div class="space-y-6">
             <!-- Quick Actions -->
-            @if($complaint->status != 'resolved')
             <div class="bg-white rounded-lg shadow p-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
                 
                 <div class="space-y-3">
-                    <button onclick="openStatusModal('{{ $complaint->id }}', '{{ $complaint->status }}')" 
-                            class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
-                        <i class="fas fa-edit mr-2"></i>Update Status
-                    </button>
-                    
-                    @if($complaint->status == 'pending')
-                        <button onclick="updateQuickStatus('{{ $complaint->id }}', 'in-progress')" 
-                                class="w-full bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition">
-                            <i class="fas fa-play mr-2"></i>Start Working
+                    @if($complaint->status != 'resolved')
+                        <button onclick="openStatusModal('{{ $complaint->id }}', '{{ $complaint->status }}')" 
+                                class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                            <i class="fas fa-edit mr-2"></i>Update Status
                         </button>
                     @endif
-                    
-                    @if($complaint->status == 'in-progress')
-                        <button onclick="updateQuickStatus('{{ $complaint->id }}', 'resolved')" 
-                                class="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
-                            <i class="fas fa-check mr-2"></i>Mark Resolved
+
+                    @if(!$complaint->department_id)
+                        <button onclick="openAssignModal('{{ $complaint->id }}')" 
+                                class="w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
+                            <i class="fas fa-hand-point-right mr-2"></i>Assign Department
                         </button>
                     @endif
                 </div>
             </div>
-            @endif
 
             <!-- Department Info -->
             @if($complaint->department)
@@ -236,7 +239,7 @@
             </div>
             @endif
 
-            <!-- Complaint Stats -->
+            <!-- Complaint Info -->
             <div class="bg-white rounded-lg shadow p-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Complaint Info</h3>
                 
@@ -253,6 +256,12 @@
                         <span class="text-gray-600">Category:</span>
                         <span class="text-gray-900">{{ $complaint->category }}</span>
                     </div>
+                    @if($complaint->images && count($complaint->images) > 0)
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Images:</span>
+                        <span class="text-gray-900">{{ count($complaint->images) }} attached</span>
+                    </div>
+                    @endif
                     @if($complaint->updated_at)
                     <div class="flex justify-between">
                         <span class="text-gray-600">Last Updated:</span>
@@ -265,6 +274,40 @@
     </div>
 </div>
 
+<!-- Assign Department Modal -->
+<div id="assignModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="mt-3">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Assign to Department</h3>
+            
+            <form id="assignForm" method="POST">
+                @csrf
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700">Department</label>
+                    <select name="department_id" required
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Select Department</option>
+                        @foreach(App\Models\Department::all() as $dept)
+                            <option value="{{ $dept->id }}">{{ $dept->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                
+                <div class="flex justify-between mt-6">
+                    <button type="button" onclick="closeAssignModal()"
+                            class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">
+                        Assign Department
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Status Update Modal -->
 <div id="statusModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
     <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
@@ -273,7 +316,6 @@
             
             <form id="statusForm" method="POST">
                 @csrf
-                @method('POST')
                 
                 <div class="space-y-4">
                     <div>
@@ -288,7 +330,7 @@
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Remarks</label>
+                        <label class="block text-sm font-medium text-gray-700">Admin Remarks</label>
                         <textarea name="remarks" rows="3"
                                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                   placeholder="Add any remarks about this status change..."></textarea>
@@ -300,7 +342,7 @@
                             class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">
                         Cancel
                     </button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
                         Update Status
                     </button>
                 </div>
@@ -310,44 +352,23 @@
 </div>
 
 <script>
+function openAssignModal(complaintId) {
+    document.getElementById('assignModal').classList.remove('hidden');
+    document.getElementById('assignForm').action = `/admin/complaints/${complaintId}/assign`;
+}
+
+function closeAssignModal() {
+    document.getElementById('assignModal').classList.add('hidden');
+}
+
 function openStatusModal(complaintId, currentStatus) {
     document.getElementById('statusModal').classList.remove('hidden');
     document.getElementById('statusSelect').value = currentStatus;
-    document.getElementById('statusForm').action = `/department/complaints/${complaintId}/status`;
+    document.getElementById('statusForm').action = `/admin/complaints/${complaintId}/status`;
 }
 
 function closeStatusModal() {
     document.getElementById('statusModal').classList.add('hidden');
-}
-
-function updateQuickStatus(complaintId, status) {
-    if (confirm(`Are you sure you want to change the status to "${status}"?`)) {
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = `/department/complaints/${complaintId}/status`;
-        
-        const csrfToken = document.createElement('input');
-        csrfToken.type = 'hidden';
-        csrfToken.name = '_token';
-        csrfToken.value = '{{ csrf_token() }}';
-        
-        const statusInput = document.createElement('input');
-        statusInput.type = 'hidden';
-        statusInput.name = 'status';
-        statusInput.value = status;
-        
-        const remarksInput = document.createElement('input');
-        remarksInput.type = 'hidden';
-        remarksInput.name = 'remarks';
-        remarksInput.value = `Status updated to ${status} via quick action`;
-        
-        form.appendChild(csrfToken);
-        form.appendChild(statusInput);
-        form.appendChild(remarksInput);
-        
-        document.body.appendChild(form);
-        form.submit();
-    }
 }
 
 // Image modal functionality

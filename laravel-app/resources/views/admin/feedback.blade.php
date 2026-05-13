@@ -174,7 +174,7 @@
                             
                             <div class="flex flex-col space-y-2 ml-4">
                                 @if($item->complaint)
-                                    <a href="{{ route('complaints.show', $item->complaint) }}" 
+                                    <a href="{{ route('admin.show', $item->complaint) }}" 
                                        class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition text-center">
                                         <i class="fas fa-eye mr-1"></i>View Complaint
                                     </a>

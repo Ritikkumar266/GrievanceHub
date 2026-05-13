@@ -12,6 +12,11 @@
     <div class="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full animate-bounce-subtle"></div>
     <div class="absolute top-32 right-20 w-16 h-16 bg-white/5 rounded-full animate-bounce-subtle" style="animation-delay: 0.5s;"></div>
     <div class="absolute bottom-20 left-1/4 w-12 h-12 bg-white/10 rounded-full animate-bounce-subtle" style="animation-delay: 1s;"></div>
+    <div class="absolute top-20 right-1/3 w-8 h-8 bg-white/10 rounded-lg rotate-45 animate-bounce-subtle" style="animation-delay: 1.5s;"></div>
+    <div class="absolute bottom-14 right-1/4 w-14 h-14 bg-yellow-300/10 rounded-full animate-bounce-subtle" style="animation-delay: 0.9s;"></div>
+    <div class="absolute top-1/2 left-12 w-6 h-6 bg-white/15 rounded-full animate-bounce-subtle" style="animation-delay: 1.8s;"></div>
+    <div class="absolute bottom-24 right-16 w-10 h-10 bg-orange-200/10 rounded-lg rotate-12 animate-bounce-subtle" style="animation-delay: 1.1s;"></div>
+    <div class="absolute top-12 left-1/2 w-5 h-5 bg-red-200/15 rounded-full animate-pulse"></div>
     
     <div class="relative max-w-7xl mx-auto px-4 py-16">
         <div class="text-center text-white">
